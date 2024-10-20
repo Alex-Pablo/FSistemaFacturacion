@@ -1,0 +1,140 @@
+<h3 class="text-bol" mat-dialog-title>Crear factura</h3>
+<mat-dialog-content class="mat-typography w-full">
+  <mat-divider></mat-divider>
+  <form [formGroup]="fFacturacion" class="mt-4">
+    <div class="mt-4">
+
+      <div class="flex flex-col md:mb-6">
+        <div class="flex flex-wrap md:mb-6 ">
+          <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Tipo de Factura</label>
+            <select formControlName="dtE_type_id"
+              class="mt-1 block w-full text-base p-3 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+              <option *ngFor="let item of aDTETypes" [value]="item.dtE_type_id">{{ item.dtE_type_name }}</option>
+            </select>
+          </div>
+          <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Moneda</label>
+            <select formControlName="currency"
+              class="mt-1 block w-full p-3 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+              <option value="GTQ">GTQ</option>
+            </select>
+          </div>
+          <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 sm:w-full">
+            <label for="nit" class="block text-sm font-medium text-gray-700">NIT del Cliente</label>
+            <input type="text" formControlName="receiver_nit"
+              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-3">
+          </div>
+          <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 sm:w-full">
+            <label for="nit" class="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
+            <input type="text" formControlName="receiver_name"
+              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-3">
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+
+        <div class="flex flex-wrap md:mb-6 mt-4">
+
+          <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Tipo B/S</label>
+            <select formControlName="item_type"
+              class="mt-1 block w-full text-base p-3 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+              <option value="S">Servicio</option>
+              <option value="B">Bien</option>
+            </select>
+          </div>
+          <div class="w-full md:w-1/6 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Cantidad</label>
+            <input type="number" formControlName="item_quantity"
+              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-3">
+          </div>
+
+          <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Descripcion</label>
+            <input type="text" formControlName="item_descripcion"
+              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-3">
+          </div>
+
+          <div class="w-full md:w-1/6 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Precio unitario</label>
+            <input type="number" step="0.01" formControlName="unit_price"
+              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-3">
+          </div>
+
+
+          <div class="w-full md:w-1/6 px-3 mb-6 md:mb-0 sm:w-full">
+            <label class="block text-sm font-medium text-gray-700">Descuento</label>
+            <input type="number" step="0.01" formControlName="discount"
+              class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-3">
+          </div>
+
+
+
+        </div>
+
+
+        <button type="button" (click)="addItemToDTE()"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4">Agregar detalle</button>
+
+      </div>
+
+      <div>
+        <p class="font-bold text-lg">Lista de productos</p>
+
+
+        <div class="table-container">
+          <div class="example-container mat-elevation-z8">
+            <div class="example-table-container">
+
+              <table mat-table [dataSource]="fFacturacion.get('dteDetails').value" matSort matSortActive="created"
+                matSortDisableClear matSortDirection="desc">
+
+                <ng-container matColumnDef="item_type">
+                  <th class="itemHeader" mat-header-cell *matHeaderCellDef>B/S</th>
+                  <td mat-cell *matCellDef="let item">{{item.item_type}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="item_quantity">
+                  <th class="itemHeader" mat-header-cell *matHeaderCellDef>Cantidad</th>
+                  <td mat-cell *matCellDef="let item">{{item.item_quantity}}</td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="item_descripcion">
+                  <th class="itemHeader" mat-header-cell *matHeaderCellDef>Descripcion</th>
+                  <td mat-cell *matCellDef="let item">{{item.item_descripcion}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="unit_price">
+                  <th class="itemHeader" mat-header-cell *matHeaderCellDef>Precio unitario</th>
+                  <td mat-cell *matCellDef="let item">{{item.unit_price}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="discount">
+                  <th class="itemHeader" mat-header-cell *matHeaderCellDef>Descuento</th>
+                  <td mat-cell *matCellDef="let item">{{item.discount}}</td>
+                </ng-container>
+
+                <!-- Table Headers and Rows -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+    (click)="_MatDialgoRef.close(false)">Cancelar</button>
+  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    (click)="onSubmit()">Crear</button>
+</mat-dialog-actions>
